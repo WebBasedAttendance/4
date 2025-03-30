@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3300 Drugstore - Login</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>3300 Drugstore Attendance</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                <span class="toggle-password" onclick="togglePassword()"></span>
+            </div>
+            <button type="submit">Login</button>
+            <p id="error-message" class="error"></p>
+        </form>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

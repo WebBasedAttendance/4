@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <button id="menu-btn" class="menu-btn">☰</button>
+    </header>
+
+    <div class="sidebar">
+        <div class="logo">
+            3300 Drugstore
+        </div>
+        <ul>
+            <li><a href="#" onclick="showSection('dashboard')">🏠 Dashboard</a></li>
+            <li><a href="#" onclick="showSection('employees')">👥 Employees</a></li>
+            <li><a href="#" onclick="showSection('attendanceRecords')">📅 Attendance Records</a></li>
+            <li><a href="#" onclick="showSection('archive')">📂 Archive</a></li>
+        </ul>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+    </div>
+
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section" style="display: none;">
+            <h2>Dashboard</h2>
+            <div class="stats">
+                <div class="stat-box" id="totalEmployeesBox">
+                    <h3>Total Employees</h3>
+                    <span id="totalEmployeesCount">0</span>
+                </div>
+                <div class="stat-box" id="presentEmployeesBox">
+                    <h3>Present</h3>
+                    <span id="presentEmployeesCount">0</span>
+                </div>
+                <div class="stat-box" id="absentEmployeesBox">
+                    <h3>Absent</h3>
+                    <span id="absentEmployeesCount">0</span>
+                </div>
+            </div>
+            <h2>Today's Attendance Records</h2>
+            <table id="dashboardAttendanceTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Morning Shift</th>
+                        <th>Afternoon Shift</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dashboard Attendance Data Will Be Loaded Here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Employees Section -->
+        <section id="employees" class="content-section" style="display: none;">
+            <h2>Employees</h2>
+            <div class="search-add-container">
+                <input type="text" id="searchEmployee" placeholder="Search Employee..." onkeyup="searchEmployee()">
+                <button onclick="openAddEmployeeForm()"><i class="fas fa-user-plus"></i> Add Employee</button>
+            </div>
+            <table id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birthdate</th>
+                        <th>Gender</th>
+                        <th>Address</th>
+                        <th>Phone no.</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Member Since</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Employee rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Add Employee Modal -->
+        <div id="addEmployeeModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddEmployeeForm()">&times;</span>
+                <h2>Add Employee</h2>
+                <label for="employeeName">Name</label>
+                <input type="text" id="employeeName" required>
+
+                <label for="employeeBirthdate">Birthdate</label>
+                <input type="date" id="employeeBirthdate" required>
+
+                <label for="employeeGender">Gender</label>
+                <div class="gender-options">
+                    <label for="male">Male</label>
+                    <input type="radio" id="male" name="employeeGender" value="Male" required>
+                    <label for="female">Female</label>
+                    <input type="radio" id="female" name="employeeGender" value="Female" required>
+                </div>
+
+                <label for="employeeAddress">Address</label>
+                <input type="text" id="employeeAddress" required>
+
+                <label for="employeePhone">Phone no.</label>
+                <input type="text" id="employeePhone" required pattern="09[0-9]{9}" title="Phone number must be 11 digits and start with '09'">
+
+                <label for="employeeEmail">Email</label>
+                <input type="email" id="employeeEmail" required pattern="[a-zA-Z0-9._%+\-]+@gmail\.com$" title="Email must end with '@gmail.com'">
+
+                <label for="employeePassword">Password</label>
+                <input type="password" id="employeePassword" required>
+
+                <div class="modal-buttons">
+                    <button onclick="submitAddEmployee()">Add</button>
+                    <button onclick="closeAddEmployeeForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Records Section -->
+        <section id="attendanceRecords" class="content-section" style="display: none;">
+            <h2>Attendance Records</h2>
+            <div id="attendanceControls">
+                <button onclick="downloadAttendancePDF()">📥</button>
+                <input type="text" id="searchAttendance" placeholder="Search by employee...">
+                <input type="date" id="searchStartDate" placeholder="Start Date">
+                <input type="date" id="searchEndDate" placeholder="End Date">
+                <button id="deleteDisplayedRecordsBtn">🗑️</button>
+            </div>
+
+            <!-- Button to open the modal -->
+            <button id="openTotalAttendanceModal" class="attendance-summary-btn">📅 Total Attendance Summary</button>
+
+            <table id="attendanceRecordsTable">
+                <thead>
+                    <tr>
+                        <th colspan="9" id="monthYearHeader" style="text-align: center; font-weight: bold;"></th>
+                    </tr>
+                    <tr id="dayHeaders">
+                        <!-- Day headers will be dynamically generated -->
+                    </tr>
+                </thead>
+                <tbody id="attendanceTableBody">
+                    <!-- Attendance Data Will Be Loaded Here -->
+                </tbody>
+            </table>
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button id="prevAttendancePage">⬅️ Prev</button>
+                <button id="nextAttendancePage">Next ➡️</button>
+            </div>
+        </section>
+
+        <!-- Modal for Total Attendance -->
+        <div id="totalAttendanceModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Total Attendance</h2>
+                <label for="totalEmployeeSelect">Select Employee:</label>
+                <select id="totalEmployeeSelect">
+                    <!-- Options will be dynamically generated -->
+                </select>
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate">
+                <button id="calculateTotalAttendance">Calculate</button>
+                <div id="totalAttendanceSummary">
+                    <!-- Total Attendance summary will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Archive Section -->
+        <section id="archive" class="content-section" style="display: none;">
+            <h2>Archive</h2>
+            <h3>Employee Members</h3>
+            <table id="archivedEmployeesTable">
+                <thead>
+                    <tr>
+                        <th>Since</th>
+                        <th>Name</th>
+                        <th>Password</th>
+                        <th>Schedule</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="archivedEmployeesTableBody">
+                    <!-- Archived Employees Data Will Be Loaded Here -->
+                </tbody>
+            </table>
+
+            <h3>Attendance Records</h3>
+            <table id="archivedAttendanceRecordsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Shift</th>
+                        <th>Date</th>
+                        <th>In</th>
+                        <th>Out</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="archivedAttendanceRecordsTableBody">
+                    <!-- Archived Attendance Records Data Will Be Loaded Here -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+﻿/* Employee Dashboard Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('image/emp.jpg');
+    background-repeat: no-repeat;
+    background-size: 1360px 640px;
+    padding: 0;
+    text-align: center; /* Center align text in body */
+}
+
+/* Menu Button */
+.menu-btn {
+    font-size: 24px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: fixed;
+    top: 5px; /* Adjust as needed */
+    left: 224px; /* Move it closer to the sidebar */
+    z-index: 1101; /* Ensure it is above the sidebar */
+    color: rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease, background-color 0.3s ease; /* Smooth transition when sidebar toggles */
+}
+
+    .menu-btn:hover {
+        background-color: #f5e9e9;
+    }
+
+    .menu-btn.hidden {
+        left: 5px; /* Move the button to the left corner */
+    }
+
+/* Sidebar - Sliding Effects */
+.sidebar {
+    width: 220px; /* Resize the sidebar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #1c1f26;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 100px 0 0 0; /* Add padding to move items down */
+        margin: 0;
+    }
+
+        .sidebar ul li {
+            padding: 15px;
+            text-align: left;
+            transition: background 0.3s ease-in-out;
+        }
+
+            .sidebar ul li a {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                font-size: 16px; /* Adjust font size */
+                color: white;
+                text-decoration: none;
+            }
+
+                .sidebar ul li a:hover,
+                .sidebar ul li a.active {
+                    background-color: #007BFF; /* Highlight active section */
+                }
+
+    /* Sidebar Logo */
+    .sidebar .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        padding: 20px 0;
+        background-color: #007BFF;
+    }
+
+/* Logout Button in Sidebar */
+.logout-btn {
+    background: none;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    right: 2px;
+}
+
+    .logout-btn:hover {
+        background: darkred;
+    }
+
+/* Main Content - Adjust with Sidebar */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+    padding: 20px;
+}
+
+.sidebar.hidden ~ .main-content {
+    margin-left: 60px;
+}
+
+/* Header */
+header {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1001;
+}
+
+    header h1 {
+        font-size: 18px; /* Make the font size smaller */
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+/* Time In/Out Section */
+.time-in-out-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.time-btn-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Add some space between buttons */
+}
+
+.time-btn {
+    padding: 12px 20px;
+    font-size: 18px;
+    background: #007bff;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+    .time-btn:hover {
+        background: #0056b3;
+        transform: scale(1.05);
+        box-shadow: 0px 5px 15px rgba(0, 91, 187, 0.5);
+    }
+
+/* Attendance Table */
+.attendance-section {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+}
+
+.attendance-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#attendanceTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+    #attendanceTable th {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    #attendanceTable td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+#attendanceTableBody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Search Bar Styling */
+#attendanceSearchBar {
+    padding: 10px;
+    font-size: 16px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* Clock Styling */
+.clock-container {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    background: #f8f9fa;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    text-align: center; /* Center-align the clock text */
+}
